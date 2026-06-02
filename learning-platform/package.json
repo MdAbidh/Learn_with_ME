@@ -6,9 +6,14 @@
     "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend && npm install --prefix electron",
     "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
     "dev:electron": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run dev --prefix electron\"",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm start --prefix frontend",
     "build": "npm run build --prefix frontend",
+    "build:full": "npm run build --prefix backend && npm run build --prefix frontend",
     "start:backend": "npm start --prefix backend",
-    "start:frontend": "npm start --prefix frontend"
+    "start:frontend": "npm start --prefix frontend",
+    "test:api": "node -e \"fetch('http://localhost:5000/api/courses').then(r => r.json()).then(d => console.log('✅ API Works:', d)).catch(e => console.error('❌ API Error:', e))\"",
+    "test:health": "node -e \"fetch('http://localhost:5000/health').then(r => r.json()).then(d => console.log('✅ Health Check:', d)).catch(e => console.error('❌ Health Error:', e))\""
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
