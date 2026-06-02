@@ -1,0 +1,41 @@
+{
+  "name": "learning-platform-electron",
+  "version": "1.0.0",
+  "description": "Personal Learning Platform Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run start --prefix ../backend\" \"wait-on http://localhost:5000 && electron .\"",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^29.1.0",
+    "electron-builder": "^24.9.1",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.learningplatform.app",
+    "productName": "Learning Platform",
+    "directories": {
+      "output": "dist"
+    },
+    "files": ["main.js", "preload.js"],
+    "win": {
+      "target": "nsis",
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "assets/icon.png"
+    }
+  }
+}

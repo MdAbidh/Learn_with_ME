@@ -1,0 +1,16 @@
+{
+  "name": "learning-platform",
+  "version": "1.0.0",
+  "description": "Personal Learning Platform - Offline Udemy-Style Course Manager",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix backend && npm install --prefix frontend && npm install --prefix electron",
+    "dev": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\"",
+    "dev:electron": "concurrently \"npm run dev --prefix backend\" \"npm start --prefix frontend\" \"npm run dev --prefix electron\"",
+    "build": "npm run build --prefix frontend",
+    "start:backend": "npm start --prefix backend",
+    "start:frontend": "npm start --prefix frontend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
