@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Flame, BookOpen, CheckCircle, Play, Clock, BarChart2 } from 'lucide-react';
 import { fetchAnalytics } from '../store/slices/analyticsSlice';
 import { formatDuration, formatDate } from '../utils/formatters';
+import { API_BASE_URL } from '../utils/api';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 
 export default function AnalyticsPage() {
@@ -106,7 +107,7 @@ export default function AnalyticsPage() {
               <div key={c.id} className="flex items-center gap-3 py-2 border-b border-gray-100 dark:border-dark-border last:border-0">
                 <div className="w-9 h-9 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-dark-600">
                   {c.thumbnail
-                    ? <img src={`http://localhost:5000${c.thumbnail}`} alt={c.name} className="w-full h-full object-cover" />
+                    ? <img src={`${API_BASE_URL}${c.thumbnail}`} alt={c.name} className="w-full h-full object-cover" />
                     : <div className="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">
                         {c.name.slice(0,2).toUpperCase()}
                       </div>}

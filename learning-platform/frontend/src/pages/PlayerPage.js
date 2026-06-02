@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { showNotification } from '../store/slices/uiSlice';
 import { formatDuration, formatTimestamp } from '../utils/formatters';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 
 // Formats that browsers can't play natively
 const UNSUPPORTED_FORMATS = ['.mkv', '.avi', '.flv', '.wmv', '.mov'];
@@ -242,7 +242,7 @@ export default function PlayerPage() {
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
-              src={`http://localhost:5000/api/video/stream/${lessonId}`}
+              src={`${API_BASE_URL}/api/video/stream/${lessonId}`}
               onTimeUpdate={handleTimeUpdate}
               onLoadedMetadata={handleLoadedMetadata}
               onPlay={() => setPlaying(true)}

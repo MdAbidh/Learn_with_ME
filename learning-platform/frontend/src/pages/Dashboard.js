@@ -7,6 +7,7 @@ import { fetchAnalytics } from '../store/slices/analyticsSlice';
 import { showNotification } from '../store/slices/uiSlice';
 import ProgressBar from '../components/UI/ProgressBar';
 import { formatDuration, formatRelativeTime } from '../utils/formatters';
+import { API_BASE_URL } from '../utils/api';
 
 export default function Dashboard() {
   const dispatch  = useDispatch();
@@ -148,7 +149,7 @@ function ContinueCard({ course, navigate }) {
       <div className="flex items-start gap-3 mb-3">
         <div className="w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-dark-600">
           {course.thumbnail
-            ? <img src={`http://localhost:5000${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
+            ? <img src={`${API_BASE_URL}${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
             : <div className="w-full h-full flex items-center justify-center text-xs font-bold text-gray-400">
                 {course.name.slice(0,2).toUpperCase()}
               </div>}
@@ -180,7 +181,7 @@ function RecentCard({ course, navigate }) {
     >
       <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-dark-600">
         {course.thumbnail
-          ? <img src={`http://localhost:5000${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
+          ? <img src={`${API_BASE_URL}${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
           : <div className="w-full h-full flex items-center justify-center text-sm font-bold text-gray-400">
               {course.name.slice(0,2).toUpperCase()}
             </div>}

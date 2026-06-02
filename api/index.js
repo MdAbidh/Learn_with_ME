@@ -50,5 +50,26 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
+// For serverless (Vercel): initialize DB lazily on first request
+let dbReady = false;
+let dbInitPromise = null;
+
+function ensureDb() {
+  if (dbReady) return Promise.resolve();
+  if (!dbInitPromise) {
+    dbInitPromise = initDb()
+      .then(() => { dbReady = true; })
+      .catch(err => { dbInitPromise = null; throw err; });
+  }
+  return dbInitPromise;
+}
+
 // Export a handler function for serverless platforms (Vercel)
-module.exports = (req, res) => app(req, res);
+module.exports = async (req, res) => {
+  try {
+    await ensureDb();
+  } catch (err) {
+    return res.status(500).json({ error: 'Database initialization failed: ' + err.message });
+  }
+  app(req, res);
+};

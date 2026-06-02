@@ -4,6 +4,7 @@ import { Layers, Play, CheckCircle, Trash2 } from 'lucide-react';
 import ProgressBar from '../UI/ProgressBar';
 import StarRating from '../UI/StarRating';
 import { formatRelativeTime } from '../../utils/formatters';
+import { API_BASE_URL } from '../../utils/api';
 
 export default function CourseCard({ course, onDelete, listView = false }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function CourseCard({ course, onDelete, listView = false }) {
         {/* Thumb */}
         <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-100 dark:bg-dark-600">
           {course.thumbnail
-            ? <img src={`http://localhost:5000${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
+            ? <img src={`${API_BASE_URL}${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
             : <div className="w-full h-full flex items-center justify-center text-sm font-bold text-gray-400 dark:text-gray-500">
                 {course.name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase()}
               </div>}
@@ -67,7 +68,7 @@ export default function CourseCard({ course, onDelete, listView = false }) {
       {/* Thumbnail */}
       <div className="relative h-36 bg-gray-100 dark:bg-dark-600 overflow-hidden">
         {course.thumbnail
-          ? <img src={`http://localhost:5000${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+          ? <img src={`${API_BASE_URL}${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
           : <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-gray-300 dark:text-gray-600">
               {course.name.split(' ').slice(0,2).map(w => w[0]).join('').toUpperCase()}
             </div>}

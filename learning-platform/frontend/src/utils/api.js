@@ -1,64 +1,43 @@
 import axios from 'axios';
 
-// Debug API URL configuration
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// On Vercel: REACT_APP_API_URL="/api", REACT_APP_API_BASE_URL=""  (set in vercel.json env)
+// Locally:   falls back to http://localhost:5000/api and http://localhost:5000
+const API_URL      = process.env.REACT_APP_API_URL      || 'http://localhost:5000/api';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL !== undefined
+  ? process.env.REACT_APP_API_BASE_URL
+  : 'http://localhost:5000';
 
-// Log API configuration (development only)
 if (process.env.NODE_ENV === 'development') {
-  console.log('🔧 API Configuration:');
-  console.log('   API URL:', API_URL);
-  console.log('   Environment:', process.env.NODE_ENV);
+  console.log('🔧 API:', API_URL, '| Base:', API_BASE_URL);
 }
 
-const api = axios.create({
-  baseURL: API_URL,
-  timeout: 30000,
-});
+const api = axios.create({ baseURL: API_URL, timeout: 30000 });
 
-// Request interceptor
 api.interceptors.request.use(
   (config) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('📤 API Request:', config.method?.toUpperCase(), config.url);
+      console.log('📤', config.method?.toUpperCase(), config.url);
     }
     return config;
   },
   (error) => Promise.reject(error)
 );
 
-// Response interceptor
 api.interceptors.response.use(
   (response) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('📥 API Response:', response.status, response.config.url);
+      console.log('📥', response.status, response.config.url);
     }
     return response;
   },
   (error) => {
     const message = error.response?.data?.error || error.message || 'An error occurred';
-    const status = error.response?.status;
-    
-    console.error('❌ API Error:', {
-      status,
-      message,
-      url: error.config?.url,
-      method: error.config?.method,
-    });
-    
-    // Handle specific errors
-    if (status === 404) {
-      console.error('⚠️  Not Found - Check if API server is running');
-    }
-    if (status === 500) {
-      console.error('⚠️  Server Error - Backend may be down');
-    }
-    if (error.code === 'ECONNABORTED') {
-      console.error('⚠️  Request Timeout - API server may be unresponsive');
-    }
-    if (error.message === 'Network Error') {
-      console.error('⚠️  Network Error - Cannot reach API. Check REACT_APP_API_URL');
-    }
-    
+    const status  = error.response?.status;
+    console.error('❌ API Error:', { status, message, url: error.config?.url });
+    if (status === 404)              console.error('⚠️  Not Found');
+    if (status === 500)              console.error('⚠️  Server Error');
+    if (error.code === 'ECONNABORTED') console.error('⚠️  Timeout');
+    if (error.message === 'Network Error') console.error('⚠️  Network Error — check REACT_APP_API_URL');
     return Promise.reject(new Error(message));
   }
 );

@@ -2,12 +2,7 @@ const express = require('express');
 const router  = express.Router();
 const path    = require('path');
 const fs      = require('fs');
-const ffmpeg  = require('fluent-ffmpeg');
-const ffmpegPath = require('ffmpeg-static');
 const { getDb } = require('../utils/database');
-
-// Point fluent-ffmpeg to the static binary
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 // Formats that browsers can play natively (no transcode needed)
 const NATIVE_FORMATS = new Set(['.mp4', '.m4v', '.webm', '.ogg', '.ogv']);
@@ -64,39 +59,12 @@ router.get('/stream/:lessonId', (req, res) => {
       return;
     }
 
-    // ── Non-native format: transcode to MP4 via FFmpeg ───────────────────────
+    // ── Non-native format: transcoding not available in serverless environment ──
     // (.ts, .mkv, .avi, .mov, .flv, .wmv, .m2ts, .mts …)
-    res.setHeader('Content-Type', 'video/mp4');
-    res.setHeader('Transfer-Encoding', 'chunked');
-    res.setHeader('Cache-Control', 'no-cache');
-
-    // Seek support via ?start= query param (seconds)
-    const startSec = parseFloat(req.query.start) || 0;
-
-    const proc = ffmpeg(filePath)
-      .inputOptions(startSec > 0 ? [`-ss ${startSec}`] : [])
-      .outputOptions([
-        '-c:v libx264',   // re-encode video to H.264
-        '-preset ultrafast',
-        '-crf 23',
-        '-c:a aac',       // re-encode audio to AAC
-        '-b:a 128k',
-        '-movflags frag_keyframe+empty_moov+faststart', // streamable MP4
-        '-f mp4',
-      ])
-      .on('error', (err) => {
-        if (!res.headersSent) {
-          res.status(500).json({ error: 'Transcoding failed: ' + err.message });
-        } else {
-          res.end();
-        }
-      });
-
-    // Pipe FFmpeg output directly to HTTP response
-    proc.pipe(res, { end: true });
-
-    // Kill FFmpeg if client disconnects
-    req.on('close', () => { try { proc.kill('SIGKILL'); } catch (e) {} });
+    return res.status(415).json({
+      error: `Format "${ext}" requires transcoding which is not supported in the web version. ` +
+             `Please convert the video to MP4, WebM, or use the Electron desktop app.`,
+    });
 
   } catch (err) {
     if (!res.headersSent) res.status(500).json({ error: err.message });

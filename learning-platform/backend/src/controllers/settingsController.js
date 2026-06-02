@@ -1,6 +1,4 @@
 const { getDb } = require('../utils/database');
-const path = require('path');
-const fs = require('fs-extra');
 
 function getSettings(req, res) {
   try {
@@ -32,12 +30,10 @@ function updateSettings(req, res) {
   }
 }
 
-// Export backup
+// Export backup — stream JSON directly (no temp file needed, works on serverless)
 async function exportBackup(req, res) {
   try {
     const db = getDb();
-    const backupDir = path.join(__dirname, '../../../backups');
-    await fs.ensureDir(backupDir);
 
     const data = {
       exported_at: new Date().toISOString(),
@@ -57,12 +53,9 @@ async function exportBackup(req, res) {
     };
 
     const filename = `backup-${Date.now()}.json`;
-    const filepath = path.join(backupDir, filename);
-    await fs.writeJson(filepath, data, { spaces: 2 });
-
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
-    res.sendFile(filepath);
+    res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

@@ -1,7 +1,19 @@
 const path = require('path');
 const fs = require('fs-extra');
 
-const UPLOADS_DIR = path.join(__dirname, '../../../uploads/thumbnails');
+// Use /tmp on Vercel serverless (read-only filesystem except /tmp)
+const UPLOADS_DIR = (() => {
+  const preferred = path.join(__dirname, '../../../uploads/thumbnails');
+  try {
+    fs.ensureDirSync(preferred);
+    const testFile = path.join(preferred, '.write_test');
+    fs.writeFileSync(testFile, '');
+    fs.removeSync(testFile);
+    return preferred;
+  } catch (e) {
+    return '/tmp/uploads/thumbnails';
+  }
+})();
 
 // Generate a simple SVG thumbnail with course initials and gradient
 function generateSvgThumbnail(courseName) {

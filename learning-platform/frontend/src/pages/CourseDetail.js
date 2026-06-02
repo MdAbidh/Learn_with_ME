@@ -12,7 +12,7 @@ import { showNotification } from '../store/slices/uiSlice';
 import ProgressBar from '../components/UI/ProgressBar';
 import StarRating from '../components/UI/StarRating';
 import { formatDuration, formatDate } from '../utils/formatters';
-import api from '../utils/api';
+import api, { API_BASE_URL } from '../utils/api';
 
 const TABS = [
   { key: 'curriculum', label: 'Curriculum',  Icon: Layers },
@@ -150,7 +150,7 @@ export default function CourseDetail() {
           {/* Thumbnail */}
           <div className="relative w-full md:w-64 h-48 md:h-auto shrink-0 bg-gray-100 dark:bg-dark-600 group">
             {course.thumbnail
-              ? <img src={`http://localhost:5000${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
+              ? <img src={`${API_BASE_URL}${course.thumbnail}`} alt={course.name} className="w-full h-full object-cover" />
               : <div className="w-full h-full flex items-center justify-center text-3xl font-bold text-gray-300 dark:text-gray-600">
                   {course.name.slice(0,2).toUpperCase()}
                 </div>}
@@ -255,7 +255,7 @@ export default function CourseDetail() {
           </div>
           {certificate ? (
             <a
-              href={`http://localhost:5000/api/certificates/${certificate.certificate_id}/download`}
+              href={`${API_BASE_URL}/api/certificates/${certificate.certificate_id}/download`}
               className="btn btn-sm btn-secondary"
               target="_blank" rel="noreferrer"
             >
@@ -352,7 +352,7 @@ export default function CourseDetail() {
                           {mod.resources.map(res => (
                             <a
                               key={res.id}
-                              href={`http://localhost:5000/api/video/resource/${res.id}`}
+                              href={`${API_BASE_URL}/api/video/resource/${res.id}`}
                               target="_blank" rel="noreferrer"
                               className="flex items-center gap-2 py-1 text-xs text-gray-600 dark:text-gray-400 hover:text-brand transition-colors"
                             >
@@ -431,7 +431,7 @@ export default function CourseDetail() {
             ) : course.modules?.flatMap(m => (m.resources || []).map(r => ({ ...r, module_name: m.name }))).map(res => (
               <a
                 key={res.id}
-                href={`http://localhost:5000/api/video/resource/${res.id}`}
+                href={`${API_BASE_URL}/api/video/resource/${res.id}`}
                 target="_blank" rel="noreferrer"
                 className="card flex items-center gap-3 p-3 hover:shadow-md transition-all"
               >

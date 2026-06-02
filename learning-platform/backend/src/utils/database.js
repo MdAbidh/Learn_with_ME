@@ -2,8 +2,33 @@ const initSqlJs = require('sql.js');
 const path = require('path');
 const fs = require('fs-extra');
 
-const DB_PATH = path.join(__dirname, '../../database/learning_platform.db');
-const SCHEMA_PATH = path.join(__dirname, '../../database/schema.sql');
+// On Vercel (serverless) only /tmp is writable; fall back to it when the
+// normal database directory is not writable.
+const DEFAULT_DB_PATH = path.join(__dirname, '../../database/learning_platform.db');
+const DB_PATH = (() => {
+  try {
+    fs.ensureDirSync(path.dirname(DEFAULT_DB_PATH));
+    // Quick write test
+    const testFile = path.join(path.dirname(DEFAULT_DB_PATH), '.write_test');
+    fs.writeFileSync(testFile, '');
+    fs.removeSync(testFile);
+    return DEFAULT_DB_PATH;
+  } catch (e) {
+    return '/tmp/learning_platform.db';
+  }
+})();
+
+const SCHEMA_PATH = (() => {
+  // Schema may be next to the db or bundled with the source
+  const candidates = [
+    path.join(__dirname, '../../database/schema.sql'),
+    path.join(process.cwd(), 'learning-platform/backend/database/schema.sql'),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return candidates[0];
+})();
 
 let db = null;       // proxy object (better-sqlite3 compatible API)
 let sqlJsDb = null;  // actual sql.js Database instance
