@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build --prefix learning-platform/frontend",
+  "outputDirectory": "learning-platform/frontend/build",
+  "functions": {
+    "api/index.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}

@@ -2,8 +2,8 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const fileUpload = require('express-fileupload');
-const { initDb } = require('../backend/src/utils/database');
-const routes = require('../backend/src/routes');
+const { initDb } = require('../learning-platform/backend/src/utils/database');
+const routes = require('../learning-platform/backend/src/routes');
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(fileUpload({ limits: { fileSize: 100 * 1024 * 1024 } }));
 
 // Static files
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../learning-platform/uploads')));
 
 // API Routes
 app.use('/api', routes);
