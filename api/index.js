@@ -27,8 +27,8 @@ app.use(fileUpload({ limits: { fileSize: 100 * 1024 * 1024 } }));
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, '../learning-platform/uploads')));
 
-// API Routes
-app.use('/api', routes);
+// API Routes (mount at root — the serverless function will be mounted at `/api`)
+app.use('/', routes);
 
 // Health check
 app.get('/health', (req, res) => {
@@ -50,4 +50,5 @@ if (process.env.NODE_ENV !== 'production') {
   });
 }
 
-module.exports = app;
+// Export a handler function for serverless platforms (Vercel)
+module.exports = (req, res) => app(req, res);
