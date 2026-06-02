@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "buildCommand": "npm run build --prefix frontend",
+  "outputDirectory": "frontend/build",
+  "env": {
+    "REACT_APP_API_URL": "@react_app_api_url"
+  },
+  "functions": {
+    "backend/src/index.js": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  }
+}
