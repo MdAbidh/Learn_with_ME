@@ -21,7 +21,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "node -e \"try { require('fs').chmodSync(require('path').join(process.cwd(), 'node_modules/.bin/react-scripts'), '755') } catch(e) {}\""
   },
   "eslintConfig": {
     "extends": [

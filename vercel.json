@@ -1,4 +1,13 @@
 {
   "version": 2,
-  "rootDirectory": "learning-platform/frontend"
+  "rootDirectory": "learning-platform/frontend",
+  "buildCommand": "npx react-scripts build",
+  "outputDirectory": "build",
+  "env": {
+    "REACT_APP_API_URL": "/api"
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "https://lern-me-backend.onrender.com/api/$1" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
