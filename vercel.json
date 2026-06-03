@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "rootDirectory": "learning-platform/frontend",
-  "buildCommand": "npx react-scripts build",
-  "outputDirectory": "build",
+  "installCommand": "cd learning-platform/frontend && npm install",
+  "buildCommand": "cd learning-platform/frontend && npx react-scripts build",
+  "outputDirectory": "learning-platform/frontend/build",
   "env": {
     "REACT_APP_API_URL": "/api"
   },
