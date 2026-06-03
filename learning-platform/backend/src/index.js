@@ -8,20 +8,30 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware - CORS configuration for both local and production (Vercel)
+// CORS — allow local dev, Vercel frontend, and any FRONTEND_URL from env
 const allowedOrigins = [
   'http://localhost:3000',
   'http://localhost:3001',
   process.env.FRONTEND_URL,
-  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
 ].filter(Boolean);
 
-app.use(cors({ origin: allowedOrigins, credentials: true }));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    if (origin.endsWith('.vercel.app') || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    callback(new Error(`CORS blocked: ${origin}`));
+  },
+  credentials: true,
+}));
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(fileUpload({ limits: { fileSize: 100 * 1024 * 1024 } }));
 
-// Static files
+// Static files (thumbnails, uploads)
 app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
 // API Routes
@@ -38,9 +48,9 @@ app.use((err, req, res, next) => {
 
 // Initialize DB then start server
 initDb().then(() => {
-  app.listen(PORT, () => {
-    console.log(`\n🚀 Learning Platform Backend running on http://localhost:${PORT}`);
-    console.log(`📚 API available at http://localhost:${PORT}/api`);
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`\n🚀 Backend running on port ${PORT}`);
+    console.log(`📚 API: http://localhost:${PORT}/api`);
   });
 }).catch(err => {
   console.error('Failed to initialize database:', err);

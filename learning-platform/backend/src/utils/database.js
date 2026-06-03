@@ -2,13 +2,20 @@ const initSqlJs = require('sql.js');
 const path = require('path');
 const fs = require('fs-extra');
 
-// On Vercel (serverless) only /tmp is writable; fall back to it when the
-// normal database directory is not writable.
+// On Render the DB_PATH env var points to a persistent disk (/data).
+// Locally the database/ directory is used. Fall back to /tmp when neither is writable.
+const RENDER_DB_PATH = process.env.DB_PATH ? process.env.DB_PATH : null;
 const DEFAULT_DB_PATH = path.join(__dirname, '../../database/learning_platform.db');
 const DB_PATH = (() => {
+  if (RENDER_DB_PATH) {
+    try {
+      fs.ensureDirSync(path.dirname(RENDER_DB_PATH));
+      return RENDER_DB_PATH;
+    } catch (e) {
+    }
+  }
   try {
     fs.ensureDirSync(path.dirname(DEFAULT_DB_PATH));
-    // Quick write test
     const testFile = path.join(path.dirname(DEFAULT_DB_PATH), '.write_test');
     fs.writeFileSync(testFile, '');
     fs.removeSync(testFile);

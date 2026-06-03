@@ -1,31 +1,4 @@
 {
   "version": 2,
-  "installCommand": "npm install && npm install --prefix learning-platform/frontend",
-  "buildCommand": "npm run build --prefix learning-platform/frontend",
-  "outputDirectory": "learning-platform/frontend/build",
-  "env": {
-    "REACT_APP_API_URL": "/api",
-    "REACT_APP_API_BASE_URL": ""
-  },
-  "functions": {
-    "api/[...slug].js": {
-      "memory": 1024,
-      "maxDuration": 30,
-      "includeFiles": "learning-platform/backend/**"
-    }
-  },
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/[...slug].js"
-    },
-    {
-      "src": "/uploads/(.*)",
-      "dest": "/api/[...slug].js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/learning-platform/frontend/build/$1"
-    }
-  ]
+  "rootDirectory": "learning-platform/frontend"
 }

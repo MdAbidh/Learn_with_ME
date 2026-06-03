@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: lern-me-backend
+    env: node
+    rootDir: learning-platform/backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        value: https://lern-me.vercel.app
+      - key: DB_PATH
+        value: /data/learning_platform.db
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1

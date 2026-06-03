@@ -5,7 +5,6 @@
 
 # Dependencies
 node_modules/
-package-lock.json
 yarn.lock
 
 # Build files
@@ -38,3 +37,15 @@ pids/
 # Misc
 .cache/
 .parcel-cache/
+
+# Database (regenerated on startup from schema)
+*.db
+learning-platform/backend/database/*.db
+!learning-platform/backend/database/schema.sql
+
+# Uploads & backups (user data)
+learning-platform/uploads/
+learning-platform/backups/
+
+# Vercel serverless functions (no longer needed — backend on Render)
+api/

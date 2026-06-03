@@ -5,14 +5,13 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "postinstall": "node -e \"const fs=require('fs-extra'),p=require('path');const dbDir=p.join(__dirname,'database');fs.ensureDirSync(dbDir);console.log('✅ Database directory ensured at',dbDir);\""
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-fileupload": "^1.4.3",
-    "ffmpeg-static": "^5.3.0",
-    "fluent-ffmpeg": "^2.1.3",
     "fs-extra": "^11.2.0",
     "mime-types": "^2.1.35",
     "sql.js": "^1.12.0",

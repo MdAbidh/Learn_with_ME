@@ -13,6 +13,9 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "build": "npm run build --prefix learning-platform/frontend"
+    "start": "npm start --prefix learning-platform/backend",
+    "build": "npm run build --prefix learning-platform/frontend",
+    "dev:backend": "npm run dev --prefix learning-platform/backend",
+    "dev:frontend": "npm start --prefix learning-platform/frontend"
   }
 }
